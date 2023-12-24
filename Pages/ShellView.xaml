@@ -1,0 +1,96 @@
+﻿<Window x:Class="ListProcesses.Pages.ShellView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:s="https://github.com/canton7/Stylet"
+        xmlns:local="clr-namespace:ListProcesses.Pages"
+        xmlns:models="clr-namespace:ListProcesses.Models"
+
+        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance local:ShellViewModel}"
+        Title="List of processes" Height="500" Width="850" MinWidth="820" MinHeight="450">
+    <Window.Resources>
+        <Style TargetType="{x:Type ListBoxItem}" x:Key="ToggleSelection">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=CanSelectedProcessDetails}"  Value="False">
+                    <Setter Property="Focusable" Value="False"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=CanSelectedProcessDetails}" Value="True">
+                    <Setter Property="Focusable" Value="True"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Window.Content>
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="175"></ColumnDefinition>
+                <ColumnDefinition Width="50"></ColumnDefinition>
+                <ColumnDefinition Width="107*"></ColumnDefinition>
+                <ColumnDefinition Width="193*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="120"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Button Content="Search" Command="{s:Action RefreshSimpleView}" Grid.Row="4" Grid.Column="1"></Button>
+            <TextBox Grid.Row="4" Text="{Binding FilterByInput}" FontSize="18"></TextBox>
+
+            <ListBox ItemsSource="{Binding SimpleProcessesView.View}" SelectedItem="{Binding CurrentProcess , Mode=TwoWay}" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                            <TextBlock Text="{Binding Path=Id}" Width="40" TextTrimming="CharacterEllipsis"></TextBlock>
+                            <TextBlock Text="{Binding Path=Name}" Width="150" TextTrimming="CharacterEllipsis"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <WrapPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="2" >
+                <TextBlock Text=" Sort by: " FontWeight="Bold" FontSize="18" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" Width="80"></TextBlock>
+                <Button Content="Id" Height="30" Width="60" HorizontalAlignment="Left" Command="{s:Action SimpleListSortBy}" CommandParameter="Id"></Button>
+                <Button Content="Name" Height="30" Width="60" HorizontalAlignment="Left" Command="{s:Action SimpleListSortBy}" CommandParameter="Name"></Button>
+            </WrapPanel>
+            <StackPanel Grid.Column="2" Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="2" >
+                <TextBlock Text=" Sort Processes by: " FontWeight="Bold" FontSize="18" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                <Button Content="Hierarchy" Width="60" HorizontalAlignment="Left" Command="{s:Action DetailedListSortBy}" CommandParameter="HierarchyType"></Button>
+                <Button Content="Id" Width="60" HorizontalAlignment="Left" Command="{s:Action DetailedListSortBy}" CommandParameter="Id"></Button>
+                <Button Content="Name" Width="60" HorizontalAlignment="Left" Command="{s:Action DetailedListSortBy}" CommandParameter="Name"></Button>
+                <Button Content="Priority" Width="60" HorizontalAlignment="Left" Command="{s:Action DetailedListSortBy}" CommandParameter="PriorityClass"></Button>
+                <Button Content="Window" Width="60" HorizontalAlignment="Left" Command="{s:Action DetailedListSortBy}" CommandParameter="WindowTitle"></Button>
+            </StackPanel>
+            <ListBox ItemsSource="{Binding ProcessesDetailedView.View}" SelectedItem="{Binding CurrentDetailedProcess , Mode=TwoWay}" SelectionChanged="{s:Action ValidateAccess}" ScrollViewer.CanContentScroll="True" Grid.IsSharedSizeScope="True" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                            <TextBlock Text="{Binding Path=HierarchyType}" Width="50" TextTrimming="CharacterEllipsis"></TextBlock>
+                            <TextBlock Text="{Binding Path=Id}" Width="50" TextTrimming="CharacterEllipsis"></TextBlock>
+                            <TextBlock Text="{Binding Path=Name}" Width="150" TextTrimming="CharacterEllipsis"></TextBlock>
+                            <TextBlock Text="{Binding Path=PriorityClass}" Width="100" TextTrimming="CharacterEllipsis"></TextBlock>
+                            <TextBlock Text="{Binding Path=WindowTitle}" Width="200" TextTrimming="CharacterEllipsis"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Grid Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                <ListBox Width="200" Margin="0,0,425,0" ItemsSource="{Binding Path=PriorityClasses}" SelectedIndex="{Binding Path=SelectedPriority}"></ListBox>
+                <Button Content="Change priority" Width="100" HorizontalAlignment="Center" Command="{s:Action ChangePriority}" Height="30" Margin="0,10,0,80"></Button>
+                <Button Content="Kill selected" Width="100" HorizontalAlignment="Center" Command="{s:Action KillProcess}" Height="30" Margin="0,80,0,10"></Button>
+            </Grid>
+            <WrapPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Grid.ColumnSpan="4" >
+                <TextBox Width="80" Text="{Binding TimeBetweenRefreshing}"></TextBox>
+                <Button Content="Start Refreshing" Width="100" HorizontalAlignment="Left" Command="{s:Action StartRefreshing}" Height="30"></Button>
+                <Button Content="Stop Refreshing" Width="100" HorizontalAlignment="Left" Command="{s:Action StopRefreshing}" Height="30"></Button>
+                <Button Content="Refresh" Width="80" HorizontalAlignment="Left" Command="{s:Action RefreshProcesses}" Height="30"></Button>
+            </WrapPanel>
+            <TextBlock Grid.Row="5" Grid.ColumnSpan="4" Text="{Binding Path=LogInfo}"></TextBlock>
+        </Grid>
+    </Window.Content>
+</Window>
