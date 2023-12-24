@@ -1,0 +1,250 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ListProcesses</name>
+    </assembly>
+    <members>
+        <member name="T:ListProcesses.App">
+            <summary>
+            Interaction logic for App.xaml
+            </summary>
+            <summary>
+            App
+            </summary>
+        </member>
+        <member name="M:ListProcesses.App.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="M:ListProcesses.App.Main">
+            <summary>
+            Application Entry Point.
+            </summary>
+        </member>
+        <member name="T:ListProcesses.Models.ProcessType">
+            <summary>
+            Enum defining hierarchyType of the process in the hierarchy
+            </summary>
+        </member>
+        <member name="T:ListProcesses.Models.DetailedProcess">
+            <summary>
+            Class representing one process
+            </summary>
+        </member>
+        <member name="P:ListProcesses.Models.DetailedProcess.HierarchyType">
+            <summary>
+            HierarchyType of undefined/parent/selected/child
+            </summary>
+        </member>
+        <member name="P:ListProcesses.Models.DetailedProcess.Id">
+            <summary>
+            Id of the process
+            </summary>
+        </member>
+        <member name="P:ListProcesses.Models.DetailedProcess.Name">
+            <summary>
+            Name of the process
+            </summary>
+        </member>
+        <member name="P:ListProcesses.Models.DetailedProcess.WindowTitle">
+            <summary>
+            Title of the main window of the process or empty string
+            </summary>
+        </member>
+        <member name="P:ListProcesses.Models.DetailedProcess.PriorityAccessed">
+            <summary>
+            If the priorityClass class was accessed successfully without access violation
+            </summary>
+        </member>
+        <member name="P:ListProcesses.Models.DetailedProcess.PriorityClass">
+            <summary>
+            PriorityClass class of the process or null if access violation
+            </summary>
+        </member>
+        <member name="M:ListProcesses.Models.DetailedProcess.#ctor(System.Diagnostics.Process,ListProcesses.Models.ProcessType)">
+            <summary>
+            Constructor copying data from process instance with it's relation to the selected process
+            </summary>
+            <param name="process">Process converted to DetailedProcess</param>
+            <param name="hierarchyType">Place in the current hierarchy</param>
+        </member>
+        <member name="M:ListProcesses.Models.DetailedProcess.ChangePriority(System.Diagnostics.ProcessPriorityClass)">
+            <summary>
+            Try to change the priority of the process
+            </summary>
+            <param name="priority">Priority to change to</param>
+            <returns>If changing of the priority was successful</returns>
+        </member>
+        <member name="M:ListProcesses.Models.DetailedProcess.Kill">
+            <summary>
+            Try to kill the process
+            </summary>
+            <returns>if the killing was successful</returns>
+        </member>
+        <member name="M:ListProcesses.Models.DetailedProcess.op_Implicit(System.Diagnostics.Process)~ListProcesses.Models.DetailedProcess">
+            <summary>
+            Assignment operator overload for Process objects
+            </summary>
+            <param name="process">Process converted to DetailedProcess</param>
+        </member>
+        <member name="M:ListProcesses.Models.DetailedProcess.PriorityNull">
+            <summary>
+            Set priority to null
+            </summary>
+        </member>
+        <member name="M:ListProcesses.Models.Extensions.GetSystemProcesses(ListProcesses.Models.SimpleProcess)">
+            <summary>
+            Extenstion of SimpleProcess, gets all child processes and parent process as a DetailedProcess
+            </summary>
+            <param name="process">SimpleProcess to work on</param>
+            <returns></returns>
+        </member>
+        <member name="M:ListProcesses.Models.Extensions.GetSimpleProcesses(System.Diagnostics.Process[])">
+            <summary>
+            Extenstion of Process array, convert them all to SimpleProcesses
+            </summary>
+            <param name="processes">Process array converted to SimpleProcesses</param>
+            <returns></returns>
+        </member>
+        <member name="M:ListProcesses.Models.Extensions.GatherProcesses(System.Int32)">
+            <summary>
+            Tries to get the process with the specified id, 
+            gets all children of the process and its parrent 
+            with their hierarchy in realation to the selected Process
+            </summary>
+            <param name="id">ID of the process to get children and parrent</param>
+            <returns>List of Tuples of Process and its hierarchy</returns>
+        </member>
+        <member name="M:ListProcesses.Models.Extensions.GetChildProcesses(System.Diagnostics.Process)">
+            <summary>
+            Get all children of the process using managment object searcher
+            </summary>
+            <param name="process"></param>
+            <returns>List of Tuples of Process and its hierarchy</returns>
+        </member>
+        <member name="M:ListProcesses.Models.Extensions.GetParentProcess(System.Diagnostics.Process)">
+            <summary>
+            Get parent of the process using managment object searcher
+            </summary>
+            <param name="process"></param>
+            <returns>Parent process or null if not found</returns>
+        </member>
+        <member name="P:ListProcesses.Models.SimpleProcess.Id">
+            <summary>
+            Id of the process
+            </summary>
+        </member>
+        <member name="P:ListProcesses.Models.SimpleProcess.Name">
+            <summary>
+            Name of the process
+            </summary>
+        </member>
+        <member name="M:ListProcesses.Models.SimpleProcess.#ctor(System.Diagnostics.Process)">
+            <summary>
+            Create SimpleProcess from a Process
+            </summary>
+            <param name="process">Process converted to SimpleProcess</param>
+        </member>
+        <member name="T:ListProcesses.Pages.ShellView">
+            <summary>
+            Interaction logic for ShellView.xaml
+            </summary>
+            <summary>
+            ShellView
+            </summary>
+        </member>
+        <member name="M:ListProcesses.Pages.ShellView.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="P:ListProcesses.Pages.ShellViewModel.SimpleProcessesView">
+            <summary>
+            CollectionViewSource of the simple processes used for the ListBox (Left bar list of all processes)
+            </summary>
+        </member>
+        <member name="P:ListProcesses.Pages.ShellViewModel.SimpleProcessesCollection">
+            <summary>
+            BindableCollection of the simple processes used for the SimpleProcessesView
+            </summary>
+        </member>
+        <member name="P:ListProcesses.Pages.ShellViewModel.CurrentProcess">
+            <summary>
+            Currently selected simple process for the parent and the list of its children
+            </summary>
+        </member>
+        <member name="P:ListProcesses.Pages.ShellViewModel.DetailedProcessesCollection">
+            <summary>
+            BindableCollection of the detailed processes used for the ProcessesDetailedView
+            </summary>
+        </member>
+        <member name="P:ListProcesses.Pages.ShellViewModel.ProcessesDetailedView">
+            <summary>
+            CollectionViewSource of the detailed processes used for the ListBox (Panel of detailed processes on the right)
+            </summary>
+        </member>
+        <member name="P:ListProcesses.Pages.ShellViewModel.CurrentDetailedProcess">
+            <summary>
+            Currently selected detailed process for changing priority or killing it
+            </summary>
+        </member>
+        <member name="M:ListProcesses.Pages.ShellViewModel.#ctor">
+            <summary>
+            Setup and run the main functionality of the app, start refreshing simple processes
+            </summary>
+        </member>
+        <member name="M:ListProcesses.Pages.ShellViewModel.SelectedProcessDetails">
+            <summary>
+            Setups DetailedProcessesCollection and ProcessesDetailedView 
+            with DetailedProcesses asociated with selected SimpleProcess
+            </summary>
+        </member>
+        <member name="M:ListProcesses.Pages.ShellViewModel.ValidateAccess">
+            <summary>
+            Checks if the app can access details of the process or perform any actions on it
+            </summary>
+        </member>
+        <member name="M:ListProcesses.Pages.ShellViewModel.StartRefreshing">
+            <summary>
+            Runs a task that refreshes the list of the SimpleProcesses
+            with selected time between refreshes or 3s if invalid
+            </summary>
+        </member>
+        <member name="M:ListProcesses.Pages.ShellViewModel.RefreshProcesses">
+            <summary>
+            Refresh all SimpleProcesses (all processes) and update the page
+            </summary>
+        </member>
+        <member name="T:XamlGeneratedNamespace.GeneratedInternalTypeHelper">
+            <summary>
+            GeneratedInternalTypeHelper
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
+            <summary>
+            CreateInstance
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            GetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            SetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
+            <summary>
+            CreateDelegate
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
+            <summary>
+            AddEventHandler
+            </summary>
+        </member>
+    </members>
+</doc>

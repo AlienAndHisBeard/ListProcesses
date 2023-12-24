@@ -6,6 +6,8 @@
     <UseWPF>true</UseWPF>
     
     <RootNamespace>ListProcesses</RootNamespace>
+    
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
